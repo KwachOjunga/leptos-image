@@ -1,10 +1,12 @@
 use crate::optimizer::*;
 
-use leptos::*;
+use leptos::{attr::AttributeValue, prelude::*};
 use leptos_meta::Link;
 
 /**
  */
+
+type ImageAttributeValue = Box<dyn IntoAttributeValue>;
 
 /// Image component for rendering optimized static images.
 /// Images MUST be static. Will not work with dynamic images.
@@ -34,10 +36,10 @@ pub fn Image(
     alt: String,
     /// Style class for image.
     #[prop(into, optional)]
-    class: Option<AttributeValue>,
+    class: Option<ImageAttributeValue>,
 ) -> impl IntoView {
     if src.starts_with("http") {
-        logging::debug_warn!("Image component only supports static images.");
+        // logging::debug_warn!("Image component only supports static images.");
         let loading = if lazy { "lazy" } else { "eager" };
         return view! { <img src=src alt=alt class=class loading=loading/> }.into_view();
     }
@@ -104,13 +106,14 @@ pub fn Image(
                         } else {
                             let loading = if lazy { "lazy" } else { "eager" };
                             view! {
-                                <img
-                                    alt=alt.get_value()
-                                    class=class.get_value()
-                                    decoding="async"
-                                    loading=loading
-                                    src=opt_image
-                                />
+                                // <img
+                                //     alt=alt.get_value()
+                                //     class=class.get_value()
+                                //     decoding="async"
+                                //     loading=loading
+                                //     src=opt_image
+                                // />
+                                <CacheImage lazy=lazy svg opt_image class priority/>
                             }
                                 .into_view()
                         }
@@ -160,8 +163,9 @@ fn CacheImage(
         {if priority {
             view! { <Link rel="preload" as_="image" href=opt_image.clone()/> }.into_view()
         } else {
-            ().into_view()
-        }}
+          ().into_view()
+        }
+        }
 
         <img
             alt=alt.clone()

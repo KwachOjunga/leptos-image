@@ -221,12 +221,12 @@ where
     let svg = format!(
         r#"
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" viewBox="0 0 {svg_width} {svg_height}" preserveAspectRatio="none">
-    <filter id="a" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"> 
-        <feGaussianBlur stdDeviation="{sigma}" edgeMode="duplicate"/> 
+    <filter id="a" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+        <feGaussianBlur stdDeviation="{sigma}" edgeMode="duplicate"/>
         <feComponentTransfer>
-            <feFuncA type="discrete" tableValues="1 1"/> 
-        </feComponentTransfer> 
-    </filter> 
+            <feFuncA type="discrete" tableValues="1 1"/>
+        </feComponentTransfer>
+    </filter>
     <image filter="url(#a)" x="0" y="0" height="100%" width="100%" href="{uri}"/>
 </svg>
 "#,
@@ -385,6 +385,7 @@ mod optimizer_tests {
     use super::*;
 
     #[test]
+    #[cfg(feature = "ssr")]
     fn url_encode() {
         let img = CachedImage {
             src: "test.jpg".to_string(),
@@ -405,6 +406,7 @@ mod optimizer_tests {
     const TEST_IMAGE: &str = "./example/start-axum/public/cute_ferris.png";
 
     #[test]
+    #[cfg(feature = "ssr")]
     fn file_path() {
         let spec = CachedImage {
             src: TEST_IMAGE.to_string(),
@@ -427,6 +429,7 @@ mod optimizer_tests {
     }
 
     #[test]
+    #[cfg(feature = "ssr")]
     fn create_blur() {
         let result = create_image_blur(
             TEST_IMAGE.to_string(),
@@ -443,6 +446,7 @@ mod optimizer_tests {
     }
 
     #[test]
+    #[cfg(feature = "ssr")]
     fn create_and_save_blur() {
         let spec = CachedImage {
             src: TEST_IMAGE.to_string(),
@@ -465,6 +469,7 @@ mod optimizer_tests {
     }
 
     #[test]
+    #[cfg(feature = "ssr")]
     fn create_opt_image() {
         let spec = CachedImage {
             src: TEST_IMAGE.to_string(),

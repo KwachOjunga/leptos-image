@@ -1,5 +1,5 @@
 use crate::optimizer::CachedImage;
-use leptos::*;
+use leptos::{prelude::*, server::codee::string::JsonSerdeCodec};
 
 /// Provides Image Cache Context so that Images can use their blur placeholders if they exist.
 ///
@@ -21,19 +21,17 @@ use leptos::*;
 ///
 /// ```
 pub fn provide_image_context() {
-    let resource: ImageResource = create_blocking_resource(
+    let resource: ImageResource = Resource::new_blocking(
         || (),
         |_| async {
-            get_image_config()
-                .await
-                .expect("Failed to retrieve image cache")
+            get_image_config().await.unwrap() // .expect("Failed to retrieve image cache")
         },
     );
 
-    leptos::provide_context(resource);
+    provide_context(resource);
 }
 
-type ImageResource = Resource<(), ImageConfig>;
+type ImageResource = Resource<ImageConfig, JsonSerdeCodec>;
 
 #[doc(hidden)]
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
